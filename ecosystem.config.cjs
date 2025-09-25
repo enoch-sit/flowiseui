@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     name: 'flowise-frontend',
     script: 'npm',
-    args: 'run preview -- --host 0.0.0.0 --port 3002',
+    args: 'run preview -- --host 0.0.0.0 --port 3002 --allowed-hosts project-1-13.eduhk.hk',
     cwd: process.cwd(),
     instances: 1,
     autorestart: true,
