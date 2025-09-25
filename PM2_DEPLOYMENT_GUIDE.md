@@ -138,12 +138,42 @@ VITE_STREAMING_ENABLED=true
 
 If using nginx for reverse proxy:
 
+#### Edit Nginx Configuration
+```bash
+# Edit nginx site configuration (replace $HOSTNAME with your domain/server name)
+sudo nano /etc/nginx/sites-available/$HOSTNAME
+```
+
+#### Nginx Configuration Example
 ```nginx
-# /etc/nginx/sites-available/flowise-frontend
+# /etc/nginx/sites-available/project-1-13 (or your hostname)
 server {
     listen 80;
-    server_name your-domain.com;
+    server_name project-1-13;
+    return 301 https://$host$request_uri;
+}
 
+server {
+    listen 443 ssl;
+    server_name project-1-13;
+    ssl_certificate /etc/nginx/ssl/dept-wildcard.eduhk/fullchain.crt;
+    ssl_certificate_key /etc/nginx/ssl/dept-wildcard.eduhk/dept-wildcard.eduhk.hk.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    client_max_body_size 100M;
+
+    # Default proxy (customize if needed)
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # FlowiseAI Frontend proxy
     location /projectui/ {
         proxy_pass http://localhost:3002/;
         proxy_http_version 1.1;
@@ -156,6 +186,28 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
+```
+
+#### Nginx Management Commands
+
+```bash
+# Test nginx configuration
+sudo nginx -t
+
+# Reload nginx (without downtime)
+sudo nginx -s reload
+
+# Restart nginx service
+sudo systemctl restart nginx
+
+# Check nginx status
+sudo systemctl status nginx
+
+# View nginx error logs
+sudo tail -f /var/log/nginx/error.log
+
+# View nginx access logs
+sudo tail -f /var/log/nginx/access.log
 ```
 
 ### Step 7: Auto-Start on System Boot
@@ -213,6 +265,27 @@ npm install
 # Clean build
 rm -rf dist
 npm run build
+```
+
+#### Vite Preview Host Blocked
+If you get "Blocked request. This host is not allowed" error, add to `vite.config.js`:
+
+```javascript
+// vite.config.js - Allow all hosts (simple)
+preview: {
+  allowedHosts: 'all',
+  port: parseInt(env.VITE_PORT) || 3002
+}
+
+// Or specify specific hosts (more secure)
+preview: {
+  allowedHosts: [
+    'project-1-13.eduhk.hk',
+    'localhost',
+    '127.0.0.1'
+  ],
+  port: parseInt(env.VITE_PORT) || 3002
+}
 ```
 
 ### Performance Tuning
@@ -314,6 +387,11 @@ pm2 stop all
 
 # Restart all
 pm2 restart all
+
+# Nginx commands
+sudo nginx -t && sudo nginx -s reload  # Test config and reload
+sudo systemctl status nginx            # Check nginx status
+sudo tail -f /var/log/nginx/error.log  # View nginx errors
 ```
 
 ## 🎉 You're All Set!

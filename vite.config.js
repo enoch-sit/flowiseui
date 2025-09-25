@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => {
     server: {
       port: parseInt(env.VITE_PORT) || 3000
     },
+    preview: {
+      allowedHosts: 'all',
+      port: parseInt(env.VITE_PORT) || 3002
+    },
     build: {
       outDir: 'dist'
     }
