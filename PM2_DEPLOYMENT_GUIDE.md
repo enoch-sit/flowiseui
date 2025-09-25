@@ -145,6 +145,8 @@ sudo nano /etc/nginx/sites-available/$HOSTNAME
 ```
 
 #### Nginx Configuration Example
+
+**Option A: Static File Serving (Recommended)**
 ```nginx
 # /etc/nginx/sites-available/project-1-13 (or your hostname)
 server {
@@ -164,7 +166,7 @@ server {
 
     client_max_body_size 100M;
 
-    # Default proxy (customize if needed)
+    # Default proxy (for Flowise backend)
     location / {
         proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
@@ -173,18 +175,33 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # FlowiseAI Frontend proxy
+    # FlowiseAI Frontend - Static Files
     location /projectui/ {
-        proxy_pass http://localhost:3002/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
+        alias /home/proj13/flowiseui/dist/;
+        try_files $uri $uri/ /projectui/index.html;
+        
+        # Cache static assets
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+            expires 1y;
+            add_header Cache-Control "public, no-transform";
+        }
     }
+}
+```
+
+**Option B: Proxy to Vite Preview (Previous approach)**
+```nginx
+# FlowiseAI Frontend - Proxy to preview server
+location /projectui/ {
+    proxy_pass http://localhost:3002/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_cache_bypass $http_upgrade;
 }
 ```
 
