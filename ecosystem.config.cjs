@@ -10,11 +10,13 @@ module.exports = {
     max_memory_restart: '1G',
     env: {
       NODE_ENV: 'production',
-      PORT: 3002
+      PORT: 3002,
+      VITE_PREVIEW_ALLOWED_HOSTS: 'all'
     },
     env_production: {
       NODE_ENV: 'production',
-      PORT: 3002
+      PORT: 3002,
+      VITE_PREVIEW_ALLOWED_HOSTS: 'all'
     },
     log_file: './logs/combined.log',
     out_file: './logs/out.log',
