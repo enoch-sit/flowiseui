@@ -12,7 +12,7 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
-    "pm2:start": "pm2 start ecosystem.config.js --env production",
+    "pm2:start": "pm2 start ecosystem.config.cjs --env production",
     "pm2:stop": "pm2 stop flowise-frontend",
     "pm2:restart": "pm2 restart flowise-frontend",
     "pm2:delete": "pm2 delete flowise-frontend",

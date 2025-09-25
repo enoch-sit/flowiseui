@@ -12,7 +12,7 @@ npm install -g pm2
 ```
 
 ### Step 2: Create PM2 Ecosystem File
-Create `ecosystem.config.js` in your project root:
+Create `ecosystem.config.cjs` in your project root:
 
 ```javascript
 module.exports = {
@@ -46,7 +46,7 @@ module.exports = {
 #### Quick Start (One-liner)
 ```bash
 # Install, build, and start with PM2
-npm install && npm run build && pm2 start ecosystem.config.js --env production
+npm install && npm run build && pm2 start ecosystem.config.cjs --env production
 ```
 
 #### Step-by-step Deployment
@@ -61,7 +61,7 @@ npm run build
 mkdir logs
 
 # 4. Start with PM2
-pm2 start ecosystem.config.js --env production
+pm2 start ecosystem.config.cjs --env production
 
 # 5. Save PM2 configuration (auto-start on reboot)
 pm2 save
@@ -201,7 +201,7 @@ pm2 logs flowise-frontend
 
 # Restart PM2 daemon
 pm2 kill
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 ```
 
 #### Build Errors
@@ -219,7 +219,7 @@ npm run build
 
 #### For High Traffic
 ```javascript
-// ecosystem.config.js
+// ecosystem.config.cjs
 module.exports = {
   apps: [{
     name: 'flowise-frontend',
@@ -252,7 +252,7 @@ echo 📁 Creating logs directory...
 if not exist logs mkdir logs
 
 echo 🎯 Starting with PM2...
-pm2 start ecosystem.config.js --env production
+pm2 start ecosystem.config.cjs --env production
 
 echo 💾 Saving PM2 configuration...
 pm2 save
@@ -280,7 +280,7 @@ echo "📁 Creating logs directory..."
 mkdir -p logs
 
 echo "🎯 Starting with PM2..."
-pm2 start ecosystem.config.js --env production
+pm2 start ecosystem.config.cjs --env production
 
 echo "💾 Saving PM2 configuration..."
 pm2 save
@@ -295,7 +295,7 @@ echo "📋 View logs with: pm2 logs flowise-frontend"
 
 ```bash
 # Deploy (first time)
-npm install && npm run build && pm2 start ecosystem.config.js --env production && pm2 save
+npm install && npm run build && pm2 start ecosystem.config.cjs --env production && pm2 save
 
 # Update (redeploy)
 pm2 stop flowise-frontend && npm run build && pm2 restart flowise-frontend
