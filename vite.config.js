@@ -15,7 +15,8 @@ export default defineConfig(({ mode }) => {
     },
     preview: {
       host: '0.0.0.0',
-      port: parseInt(env.VITE_PORT) || 3002
+      port: parseInt(env.VITE_PORT) || 3002,
+      allowedHosts: ['.eduhk.hk', 'localhost', '127.0.0.1']
     },
     build: {
       outDir: 'dist'
