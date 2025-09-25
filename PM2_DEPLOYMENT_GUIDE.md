@@ -268,17 +268,23 @@ npm run build
 ```
 
 #### Vite Preview Host Blocked
-If you get "Blocked request. This host is not allowed" error, add to `vite.config.js`:
+If you get "Blocked request. This host is not allowed" error, update `vite.config.js`:
 
 ```javascript
-// vite.config.js - Allow all hosts (simple)
+// vite.config.js - Complete host configuration
+server: {
+  host: '0.0.0.0',
+  port: parseInt(env.VITE_PORT) || 3000
+},
 preview: {
+  host: '0.0.0.0',
   allowedHosts: 'all',
   port: parseInt(env.VITE_PORT) || 3002
 }
 
-// Or specify specific hosts (more secure)
+// Alternative: specify specific hosts (more secure)
 preview: {
+  host: '0.0.0.0',
   allowedHosts: [
     'project-1-13.eduhk.hk',
     'localhost',
@@ -286,6 +292,15 @@ preview: {
   ],
   port: parseInt(env.VITE_PORT) || 3002
 }
+```
+
+Then rebuild and restart:
+```bash
+npm run build
+pm2 restart flowise-frontend
+
+# Check logs if still having issues
+pm2 logs flowise-frontend
 ```
 
 ### Performance Tuning

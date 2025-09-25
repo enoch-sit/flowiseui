@@ -10,9 +10,11 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     base: env.VITE_BASE_PATH || '/projectui/',
     server: {
+      host: '0.0.0.0',
       port: parseInt(env.VITE_PORT) || 3000
     },
     preview: {
+      host: '0.0.0.0',
       allowedHosts: 'all',
       port: parseInt(env.VITE_PORT) || 3002
     },
